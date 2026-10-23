@@ -67,14 +67,14 @@ h2 em{font-style:italic}
 .cta:hover .arr{transform:translateX(6px)}
 
 /* ============ 00 HERO (Base Camp) ============ */
-#base{min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:0}
+#base{min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:0 0 72px}   /* 72px keeps text clear of the ticker */
 .hero-inner{position:relative;z-index:2;padding-top:110px}
 #terrain{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9}
-.hero-title{position:relative;font-family:var(--serif);font-weight:400;font-size:clamp(64px,17vw,300px);line-height:.82;letter-spacing:-.05em;text-transform:uppercase}
+.hero-title{position:relative;margin-top:clamp(20px,3svh,36px);font-family:var(--serif);font-weight:400;font-size:clamp(64px,17vw,300px);line-height:.82;letter-spacing:-.05em;text-transform:uppercase}
 .hero-title .line{display:block;white-space:nowrap}
 .hero-title .line:nth-child(2){padding-left:.9em}
 .ch{display:inline-block;will-change:transform}
-.hero-meta{position:relative;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end;margin-top:40px}
+.hero-meta{position:relative;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end;margin-top:clamp(32px,6svh,56px)}
 .hero-meta p{max-width:34ch;color:var(--mute)}
 
 .chart{position:absolute;left:0;bottom:0;width:100%;height:55%;pointer-events:none}
@@ -82,26 +82,43 @@ h2 em{font-style:italic}
 .chart path.ghost{stroke:var(--fg);opacity:.12;stroke-width:1}
 .js .chart #ridge{stroke-dashoffset:1}   /* hidden until scroll draws it */
 
-.ticker{position:absolute;left:0;right:0;bottom:24px;overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;font-family:var(--mono);font-size:13px}
+.ticker{position:absolute;left:0;right:0;bottom:10px;overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;font-family:var(--mono);font-size:13px}
 .ticker-track{display:inline-block;animation:tick 28s linear infinite}
 .ticker span{margin-right:48px}
 .ticker .dn{color:var(--red)}
 @keyframes tick{to{transform:translateX(-50%)}}
 
 /* ============ 00 MANIFESTO ============ */
-.manifesto{padding-top:clamp(64px,10svh,120px)}
+.manifesto{min-height:100svh;display:flex;flex-direction:column;justify-content:center;gap:clamp(24px,4svh,48px);padding-top:clamp(64px,10svh,120px)}   /* full-screen, content centred */
 .manifesto p{font-family:var(--serif);font-size:clamp(34px,5.4vw,96px);line-height:1.06;letter-spacing:-.02em;max-width:18em}
 .js .manifesto .w{opacity:.14}   /* words light up on scroll */
 
-/* ============ 01 LEARN (pinned horizontal) ============ */
-.learn{height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;border-top:1px solid var(--line)}
+/* ============ 01 LEARN (pinned scene: factory → card → "YOU" grows) ============ */
+.learn{border-top:1px solid var(--line);padding:clamp(72px,10svh,120px) 0}
 .learn-head{padding:0 var(--pad)}
-.htrack{display:flex;gap:clamp(20px,3vw,48px);padding:48px var(--pad) 0;width:max-content;will-change:transform}
-.hcard{width:clamp(280px,30vw,460px);height:clamp(340px,50svh,480px);border-top:1px solid var(--fg);padding:24px 0;display:flex;flex-direction:column;justify-content:space-between;flex-shrink:0}
+.learn h2{font-size:clamp(40px,7vw,104px)}
+/* default (no JS / reduced motion): a plain grid of cards, scene props hidden */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding:40px var(--pad) 0}
+.factory,.person,.ground{display:none}
+.hcard{background:var(--bg);border:1px solid var(--fg);padding:clamp(18px,2.4vw,32px);display:flex;flex-direction:column;gap:clamp(16px,3svh,32px)}
 .hcard .n{font-family:var(--mono);font-size:12px;color:var(--mute)}
-.hcard h3{font-family:var(--serif);font-weight:400;font-size:clamp(40px,4.4vw,72px);line-height:.95;letter-spacing:-.02em}
+.hcard h3{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4vw,64px);line-height:.95;letter-spacing:-.02em}
 .hcard p{color:var(--mute);max-width:30ch}
-.hcard:hover h3{font-style:italic}
+/* animated scene (GSAP moves cards/YOU with transforms only) */
+.js .learn{height:100svh;padding-top:clamp(64px,9svh,96px);display:flex;flex-direction:column;overflow:hidden}
+.js .stage{position:relative;flex:1;min-height:0;contain:layout paint}
+.js .cards{display:block;position:absolute;inset:0;padding:0}
+.js .hcard{position:absolute;left:0;top:0;z-index:1;width:clamp(240px,42vw,540px);box-shadow:0 30px 60px -30px rgba(10,14,18,.45)}
+.js .factory,.js .person,.js .ground{display:block}
+.ground{position:absolute;left:var(--pad);right:var(--pad);bottom:14%;border-top:1px dashed var(--line)}
+.factory{position:absolute;left:var(--pad);bottom:14%;width:clamp(96px,14vw,200px)}
+.factory svg{display:block;width:100%;height:auto}
+.factory-label{position:absolute;top:100%;left:0;margin-top:8px;font-size:10px;color:var(--mute);white-space:nowrap}
+.person{position:absolute;right:calc(var(--pad) + clamp(56px,9vw,130px));bottom:14%;z-index:2}   /* above the cards, so they vanish "into" YOU */
+.you{position:absolute;left:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:6px;transform-origin:50% 100%}
+.you svg{display:block;width:clamp(48px,6vw,84px);height:auto}
+.you-tag{display:flex;gap:6px;align-items:center;padding:3px 8px;border-radius:999px;background:var(--lime);color:var(--ink);font-family:var(--mono);font-size:10px;letter-spacing:.1em;white-space:nowrap}
+.you-tag i{font-style:normal;opacity:.6}
 
 /* ============ 03 LEAD (ladder) ============ */
 .ladder{margin-top:clamp(40px,6vw,88px);list-style:none;display:flex;flex-direction:column;gap:6px}
@@ -115,16 +132,26 @@ h2 em{font-style:italic}
 .step:is(:hover,:focus-within,.hovered) span{color:var(--lime)}
 
 /* ============ NUMBERS ============ */
-.numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--pad);margin-top:clamp(40px,6vw,88px);border-top:1px solid var(--fg);padding-top:28px;text-align:center}
+.numbers-wrap{padding-top:0;padding-bottom:0}   /* spacing comes from #lead above and #join below */
+.numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--pad);margin-top:0;border-top:1px solid var(--fg);padding-top:28px;text-align:center}
 .num{display:flex;flex-direction:column;align-items:center}
 .num .v{width:100%;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:clamp(52px,9vw,150px);line-height:.9;letter-spacing:-.04em;text-align:center}
 .num .k{margin-top:12px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);text-align:center}
 
 /* ============ 04 JOIN ============ */
-.join{background:var(--paper);color:var(--ink)}
-.join h2{font-size:clamp(72px,16vw,280px)}
-.join-line{font-family:var(--serif);font-size:clamp(24px,2.6vw,40px);max-width:28ch;margin-top:32px;line-height:1.15}
+.join{background:var(--paper);color:var(--ink);padding-bottom:clamp(200px,28svh,260px);--man-w:44px;--run:min(420px,calc(100vw - 2*var(--pad) - var(--man-w) - 16px))}   /* extra bottom room = the stick man's stage */
+.join h2{font-size:clamp(60px,13vw,230px)}
+.join-line{font-family:var(--serif);font-size:clamp(24px,2.6vw,40px);max-width:34ch;margin-top:32px;line-height:1.15}
 .join-row{display:flex;gap:20px;flex-wrap:wrap;align-items:center;margin-top:48px}
+/* stick man: paces under the button, hops, points up, says "press apply now" */
+.join::after{content:"";position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(16px,3svh,36px);border-top:1px dashed var(--line)}   /* ground */
+.walker{position:absolute;left:var(--pad);bottom:clamp(16px,3svh,36px);width:var(--man-w);pointer-events:none}
+.hop{position:relative}
+.man{display:block;width:100%;height:auto}
+.leg{transform-origin:20px 42px}
+.arm,.point{transform-origin:20px 23px}
+.say{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:8px;padding:6px 10px;border-radius:6px;background:var(--lime);color:var(--ink);font-size:11px;white-space:nowrap}
+.say::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:var(--lime)}
 
 /* ============ FOOTER ============ */
 footer{background:var(--ink);color:var(--paper);padding:64px var(--pad) 32px;overflow:hidden}
@@ -150,10 +177,35 @@ footer{background:var(--ink);color:var(--paper);padding:64px var(--pad) 32px;ove
 html.has-cursor .cursor{display:block}
 html.has-cursor *{cursor:none!important}
 
+/* ============ FLAIR LOOPS (CSS only; paused off-screen via .off; skipped for reduced motion) ============ */
+[data-live].off *{animation-play-state:paused}
+@media (prefers-reduced-motion:no-preference){
+  /* footer wordmark, 8s loop: hold 1s · letters blink in a wave · hold · "ECON" blinks · "ASCENT" blinks · long hold */
+  .fl{animation:fl-blink 8s step-end infinite forwards;animation-delay:calc(1s + var(--k,0)*.2s)}
+  .fw{animation:fw-blink 8s step-end infinite}
+  .fw + .fw{animation-delay:1s}
+  @keyframes fl-blink{0%{opacity:0}1.5%{opacity:1;color:var(--lime)}4%,100%{opacity:1;color:inherit}}
+  @keyframes fw-blink{0%,50%{opacity:1}52%{opacity:0}54%{opacity:1}56%{opacity:0}58%{opacity:1}60%{opacity:0}62%,100%{opacity:1}}
+  /* stick man: walks 12s round trip (turns round at the end), hops every 3.2s, legs/arm swing */
+  .walker{animation:stroll 12s linear infinite}
+  .hop{animation:hop 3.2s infinite}
+  .man{animation:face 12s step-end infinite}
+  .leg{animation:swing .5s ease-in-out infinite alternate}
+  .leg.b{animation-direction:alternate-reverse}
+  .arm{animation:swing .5s ease-in-out infinite alternate-reverse}
+  .point{animation:wag .4s ease-in-out infinite alternate}
+  @keyframes stroll{50%{transform:translateX(var(--run))}100%{transform:none}}
+  @keyframes face{0%{transform:scaleX(1)}50%{transform:scaleX(-1)}}
+  @keyframes hop{0%,55%{transform:none;animation-timing-function:cubic-bezier(.2,.7,.4,1)}70%{transform:translateY(-58px);animation-timing-function:cubic-bezier(.6,0,.8,.3)}85%,100%{transform:none}}
+  @keyframes swing{from{transform:rotate(-28deg)}to{transform:rotate(28deg)}}
+  @keyframes wag{from{transform:rotate(-5deg)}to{transform:rotate(7deg)}}
+}
+
 /* ============ RESPONSIVE + REDUCED MOTION (keep last) ============ */
 @media (max-width:760px){
   .nav ol,.altitude{display:none}
   .step{width:100%}
+  .js .hcard{width:min(78vw,340px)}
   .numbers{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
@@ -215,25 +267,45 @@ html.has-cursor *{cursor:none!important}
   <p id="manifesto-h" data-words>We are not here to pad CVs. We are here to become the people others wish they had in their corner. Stand tall. Speak clear. Build big. Lift everyone. This is the standard. Meet it or raise it.</p>
 </section>
 
-<!-- LEVEL 01: LEARN (cards scroll sideways; add/remove <article>s freely) -->
+<!-- LEVEL 01: LEARN — pinned scene: each card leaves the Econ Ascent factory, grows to the
+     centre, then jumps into "YOU", who gets bigger with every one. Add/remove <article>s freely. -->
 <section id="learn" class="learn">
   <div class="learn-head">
     <div class="level-tag mono"><b>01</b> Learn — what we do</div>
     <h2>Learn <em>the easy way</em></h2>
   </div>
-  <div class="htrack">
-    <article class="hcard reveal"><div class="n">01 / 05</div><h3>Market Simulation</h3><p>Experience real-world market dynamics through simulated trading, strategic decisions, and competitive challenges</p></article>
-    <article class="hcard reveal"><div class="n">02 / 05</div><h3>Workshops</h3><p>Develop practical skills in economics, finance, and business through interactive, hands-on learning.</p></article>
-    <article class="hcard reveal"><div class="n">03 / 05</div><h3>Guest Talks</h3><p>Gain insights from industry professionals, academics, and entrepreneurs on emerging trends and career opportunities.</p></article>
-    <article class="hcard reveal"><div class="n">04 / 05</div><h3>Case Competitions</h3><p>Solve real-world business problems, pitch innovative solutions, and compete with students from other universities.</p></article>
-    <article class="hcard reveal"><div class="n">05 / 05</div><h3>Research</h3><p>Explore economic trends, analyse data, and develop evidence-based perspectives on business and current affairs.</p></article>
+  <div class="stage">
+    <div class="ground"></div>
+    <div class="factory" aria-hidden="true">
+      <svg viewBox="0 0 120 96" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round">
+        <path d="M10 90V22h14v68M24 90V46l28 14V46l28 14V46l28 14v30z"/>
+        <rect x="95" y="72" width="13" height="18" fill="var(--lime)" stroke="none"/>
+        <circle cx="17" cy="13" r="4"/><circle cx="27" cy="5" r="3"/>
+      </svg>
+      <span class="factory-label mono">Econ Ascent</span>
+    </div>
+    <div class="person" aria-hidden="true">
+      <div class="you">
+        <div class="you-tag"><b>YOU</b><i id="lvl">LV 0</i></div>
+        <svg viewBox="0 0 48 80" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+          <circle cx="24" cy="12" r="9" fill="currentColor"/>
+          <path d="M12 62V36q0-9 12-9t12 9v26z" fill="currentColor"/>
+          <path d="M12 38 4 52M36 38l8 14M18 62v14M30 62v14" fill="none"/>
+          <circle cx="24" cy="44" r="4" fill="var(--lime)" stroke="none"/>
+        </svg>
+      </div>
+    </div>
+    <div class="cards">
+      <article class="hcard"><div class="n">01 / 05</div><h3>Market Simulation</h3><p>Experience real-world market dynamics through simulated trading, strategic decisions, and competitive challenges</p></article>
+      <article class="hcard"><div class="n">02 / 05</div><h3>Workshops</h3><p>Develop practical skills in economics, finance, and business through interactive, hands-on learning.</p></article>
+      <article class="hcard"><div class="n">03 / 05</div><h3>Guest Talks</h3><p>Gain insights from industry professionals, academics, and entrepreneurs on emerging trends and career opportunities.</p></article>
+      <article class="hcard"><div class="n">04 / 05</div><h3>Case Competitions</h3><p>Solve real-world business problems, pitch innovative solutions, and compete with students from other universities.</p></article>
+      <article class="hcard"><div class="n">05 / 05</div><h3>Research</h3><p>Explore economic trends, analyse data, and develop evidence-based perspectives on business and current affairs.</p></article>
+    </div>
   </div>
 </section>
 
-<!-- LEVEL 03: LEAD (ladder). Bars widen top→bottom automatically; just add/remove <li>s.
-     NOTE: the original file never closed this <section>, so Numbers + Join have always
-     rendered nested inside it (which gives them extra side padding). Kept as-is so the
-     design is pixel-identical; it is now closed properly after Join. -->
+<!-- LEVEL 03: LEAD (ladder). Bars widen top→bottom automatically; just add/remove <li>s. -->
 <section id="lead" class="level wrap">
   <div class="level-tag mono"><b>03</b> Lead — the ladder</div>
   <h2>The <em>ladder</em></h2>
@@ -257,25 +329,35 @@ html.has-cursor *{cursor:none!important}
       <div><span>Sarah Shabaz, Elaf Zahra, Usman Latif, Humna Fatima</span></div></li>
     <li class="step"><h3>Members</h3><span>60</span></li>
   </ol>
+</section>
 
-  <!-- NUMBERS (data-count = number it counts up to) -->
-  <section class="level wrap" aria-label="Numbers">
-    <div class="numbers">
-      <div class="num reveal"><div class="v"><span data-count="60">0</span></div><div class="k">Members</div></div>
-      <div class="num reveal"><div class="v"><span data-count="02">0</span></div><div class="k">Events</div></div>
-      <div class="num reveal"><div class="v"><span data-count="05">0</span></div><div class="k">Partners</div></div>
-    </div>
-  </section>
+<!-- NUMBERS (data-count = number it counts up to) -->
+<section class="level wrap numbers-wrap" aria-label="Numbers">
+  <div class="numbers">
+    <div class="num reveal"><div class="v"><span data-count="60">0</span></div><div class="k">Members</div></div>
+    <div class="num reveal"><div class="v"><span data-count="02">0</span></div><div class="k">Events</div></div>
+    <div class="num reveal"><div class="v"><span data-count="05">0</span></div><div class="k">Partners</div></div>
+  </div>
+</section>
 
-  <!-- LEVEL 04: JOIN -->
-  <section id="join" class="level join wrap">
-    <div class="level-tag mono"><b>04</b> Join — summit</div>
-    <h2>Join the <em>ascent</em></h2>
-    <p class="join-line">We are looking for people who read the footnotes, argue in good faith, and can explain a bond yield at 2am. [Short line on what you look for.]</p>
-    <div class="join-row">
-      <a class="cta mag lime" href="[form URL]" data-tag="Apply">Apply now <span class="arr">→</span></a>
+<!-- LEVEL 04: JOIN -->
+<section id="join" class="level join wrap" data-live>
+  <div class="level-tag mono"><b>04</b> Join — summit</div>
+  <h2>Join the <em>ascent</em></h2>
+  <p class="join-line">Curious about money, markets, or just how the world works? Whatever you study and wherever you are starting from, there is a place for you here. No experience needed.</p>
+  <div class="join-row">
+    <a class="cta mag lime" href="[form URL]" data-tag="Apply">Apply now <span class="arr">→</span></a>
+  </div>
+  <div class="walker" aria-hidden="true">
+    <div class="hop">
+      <div class="say mono">Press apply now ↑</div>
+      <svg class="man" viewBox="0 0 40 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+        <circle cx="20" cy="9" r="7"/><path d="M20 16v26"/>
+        <path class="arm" d="M20 23 11 36"/><path class="point" d="M20 23 31 7"/>
+        <path class="leg a" d="M20 42v24"/><path class="leg b" d="M20 42v24"/>
+      </svg>
     </div>
-  </section>
+  </div>
 </section>
 
 </main>
@@ -287,7 +369,7 @@ html.has-cursor *{cursor:none!important}
     <a href="https://twitter.com/" data-tag="Follow">X</a>
     <a href="mailto:[email]" data-tag="Write">Email</a>
   </div>
-  <div class="foot-word" aria-hidden="true" id="foot-word">Econ Ascent</div>
+  <div class="foot-word" aria-hidden="true" id="foot-word" data-live>Econ Ascent</div>
   <div class="foot-meta mono"><span>© 2026 Econ Ascent</span><span>Rise above equilibrium.</span></div>
 </footer>
 
@@ -309,6 +391,7 @@ html.has-cursor *{cursor:none!important}
     counterMs: 2000,                          // number count-up duration
     lenis: { duration: 1.15, smoothWheel: true },
     terrain: { lines: 4, speed: 0.36 },       // hero wave lines, drift speed (rad/s)
+    learn: { scrollPerCard: 1.5, grow: 0.2 }, // Learn scene: scroll length per card (× screen height), YOU's growth per card (+20%)
   };
 
   /* ---------- 0. Helpers & capability flags ---------- */
@@ -337,6 +420,12 @@ html.has-cursor *{cursor:none!important}
   const ticker = $('.ticker-track');            // duplicate ticker items for a seamless loop
   ticker.append(...[...ticker.children].map(n => n.cloneNode(true)));
   $$('.step').forEach((el, i) => el.style.setProperty('--i', i));   // ladder width steps
+  const wordmark = $('#foot-word');             // footer wordmark → words → letters (blinked by CSS)
+  wordmark.innerHTML = wordmark.textContent.trim().split(' ')
+    .map(w => `<span class="fw">${[...w].map(c => `<span class="fl">${c}</span>`).join('')}</span>`).join(' ');
+  $$('.fl', wordmark).forEach((el, i) => el.style.setProperty('--k', i));
+  const liveIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('off', !e.isIntersecting)));
+  $$('[data-live]').forEach(el => liveIO.observe(el));              // CSS loops only run while visible
 
   /* ---------- 2. Smooth scroll + scroll-driven UI ---------- */
   if (animate && window.Lenis) {
@@ -478,11 +567,45 @@ html.has-cursor *{cursor:none!important}
   gsap.to('.manifesto .w', { opacity: 1, stagger: 0.1, ease: 'none',
     scrollTrigger: { trigger: '.manifesto', start: 'top 75%', end: 'bottom 45%', scrub: true } });
 
-  // Learn: pinned horizontal scroll
-  const htrack = $('.htrack');
-  const hScroll = () => Math.max(0, htrack.scrollWidth - root.clientWidth);
-  gsap.to(htrack, { x: () => -hScroll(), ease: 'none',
-    scrollTrigger: { trigger: '#learn', pin: true, scrub: 1, start: 'top top', end: () => '+=' + hScroll(), invalidateOnRefresh: true } });
+  // Learn: one scrubbed timeline. Card leaves the factory (left) → grows to the centre → jumps into YOU (right).
+  const stage = $('.stage'), factory = $('.factory'), person = $('.person'), you = $('.you'), lvlEl = $('#lvl');
+  const cards = $$('.hcard'), N = cards.length, G = CFG.learn.grow;
+  const out = () => ({ x: factory.offsetLeft + factory.offsetWidth * 0.9, y: factory.offsetTop + factory.offsetHeight * 0.84 });  // factory door
+  const mid = () => ({ x: stage.clientWidth / 2, y: stage.clientHeight * 0.4 });                                                    // centre stage
+  const eat = i => ({ x: person.offsetLeft, y: person.offsetTop - you.offsetHeight * (1 + G * i) * 0.4 });                          // YOU's chest
+  const arc = () => mid().y - stage.clientHeight * 0.18;                                                                            // top of the jump
+  gsap.set(cards, { xPercent: -50, yPercent: -50 });
+  gsap.set(you, { xPercent: -50, scale: 1 });
+
+  const tl = gsap.timeline({ defaults: { ease: 'none' } });
+  const later = { immediateRender: false };      // sequential tweens on one property must not pre-render
+  // One card = 1 timeline unit:  emerge 0–.30 · READ (holds at centre) .30–.75 · jump .75–.92 · YOU gulps .92–1
+  cards.forEach((card, i) => {
+    const s0 = 1 + G * i, s1 = 1 + G * (i + 1);  // YOU's size before / after eating this card
+    tl.fromTo(card, { x: () => out().x, y: () => out().y, scale: 0.12, autoAlpha: 0 },
+                    { x: () => mid().x, y: () => mid().y, scale: 1, autoAlpha: 1, ease: 'power2.out', duration: 0.3 }, i)          // emerge + enlarge
+      .fromTo(card, { x: () => mid().x }, { x: () => eat(i).x, ease: 'power1.in', duration: 0.17, ...later }, i + 0.75)            // jump → right
+      .fromTo(card, { y: () => mid().y }, { y: arc, ease: 'power2.out', duration: 0.08, ...later }, i + 0.75)                       // …up
+      .fromTo(card, { y: arc }, { y: () => eat(i).y, ease: 'power2.in', duration: 0.09, ...later }, i + 0.83)                       // …and down
+      .fromTo(card, { scale: 1 }, { scale: 0.1, ease: 'power1.in', duration: 0.17, ...later }, i + 0.75)
+      .fromTo(card, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.02, ...later }, i + 0.9)
+      .fromTo(you, { scale: s0 }, { scale: s1 + 0.12, ease: 'power2.out', duration: 0.03, ...later }, i + 0.92)                     // gulp: pop…
+      .fromTo(you, { scale: s1 + 0.12 }, { scale: s1, duration: 0.05, ...later }, i + 0.95);                                         // …and settle bigger
+  });
+  tl.to({}, { duration: 0.3 }, N - 0.05);        // short pause on the finished YOU before the page scrolls on
+
+  // Scroll → timeline. After you stop scrolling it eases to the nearest "reading" spot (card centred),
+  // so every card can be read whatever your scroll speed is.
+  const rest = [0, ...cards.map((_, i) => (i + 0.5) / tl.duration()), 1];
+  ScrollTrigger.create({ trigger: '#learn', animation: tl, pin: true, scrub: 0.8, start: 'top top', invalidateOnRefresh: true,
+    end: () => '+=' + N * innerHeight * CFG.learn.scrollPerCard,
+    snap: { snapTo: rest, duration: { min: 0.25, max: 0.7 }, delay: 0.12, ease: 'power1.inOut' } });
+
+  let lvl = -1;                                  // "LV n" tag follows the timeline, both directions
+  tl.eventCallback('onUpdate', () => {
+    const l = Math.max(0, Math.min(N, Math.floor(tl.time() + 0.08)));
+    if (l !== lvl) { lvl = l; lvlEl.textContent = 'LV ' + l; }
+  });
 
   // One-shot reveals
   $$('.reveal').forEach(el => gsap.to(el, { clipPath: 'inset(0% 0 0 0)', duration: 1.1, ease: 'expo.out', scrollTrigger: onceAt(el, 'top 88%') }));
